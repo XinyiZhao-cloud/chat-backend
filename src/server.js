@@ -6,9 +6,9 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const multer = require("multer");
 const { v4: uuidv4 } = require("uuid");
-const { BlobServiceClient } = require("@azure/storage-blob");
+// const { BlobServiceClient } = require("@azure/storage-blob");
 const { Server } = require("socket.io");
-const { useAzureSocketIO } = require("@azure/web-pubsub-socket.io");
+// const { useAzureSocketIO } = require("@azure/web-pubsub-socket.io");
 
 const { getPool, sql } = require("./db");
 const authMiddleware = require("./authMiddleware");
@@ -24,16 +24,16 @@ app.use(express.json());
 
 const upload = multer({ storage: multer.memoryStorage() });
 
-const blobServiceClient = BlobServiceClient.fromConnectionString(
-    process.env.AZURE_STORAGE_CONNECTION_STRING
-);
-const containerClient = blobServiceClient.getContainerClient(
-    process.env.AZURE_STORAGE_CONTAINER
-);
+// const blobServiceClient = BlobServiceClient.fromConnectionString(
+//     process.env.AZURE_STORAGE_CONNECTION_STRING
+// );
+// const containerClient = blobServiceClient.getContainerClient(
+//     process.env.AZURE_STORAGE_CONTAINER
+// );
 
-async function ensureContainer() {
-    await containerClient.createIfNotExists();
-}
+// async function ensureContainer() {
+//     await containerClient.createIfNotExists();
+// }
 
 function createToken(user) {
     return jwt.sign(
@@ -352,10 +352,10 @@ const io = new Server(httpServer, {
     }
 });
 
-useAzureSocketIO(io, {
-    hub: process.env.WEB_PUBSUB_HUB,
-    connectionString: process.env.WEB_PUBSUB_CONNECTION_STRING
-});
+// useAzureSocketIO(io, {
+//     hub: process.env.WEB_PUBSUB_HUB,
+//     connectionString: process.env.WEB_PUBSUB_CONNECTION_STRING
+// });
 
 io.on("connection", (socket) => {
     socket.on("join-room", (roomId) => {
