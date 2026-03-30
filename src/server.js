@@ -331,14 +331,18 @@ app.get("/api/health", async (_req, res) => {
 
 // -------------------- SOCKET.IO + AZURE WEB PUBSUB --------------------
 
-const httpServer = app.listen(port, async () => {
-    try {
-        await ensureContainer();
-        await getPool();
-        console.log(`Backend running on port ${port}`);
-    } catch (error) {
-        console.error("Startup error:", error);
-    }
+// const httpServer = app.listen(port, async () => {
+//     try {
+//         await ensureContainer();
+//         await getPool();
+//         console.log(`Backend running on port ${port}`);
+//     } catch (error) {
+//         console.error("Startup error:", error);
+//     }
+// });
+
+const httpServer = app.listen(port, () => {
+    console.log(`Backend running on port ${port}`);
 });
 
 const io = new Server(httpServer, {
