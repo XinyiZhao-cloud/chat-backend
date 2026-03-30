@@ -24,16 +24,16 @@ app.use(express.json());
 
 const upload = multer({ storage: multer.memoryStorage() });
 
-// const blobServiceClient = BlobServiceClient.fromConnectionString(
-//     process.env.AZURE_STORAGE_CONNECTION_STRING
-// );
-// const containerClient = blobServiceClient.getContainerClient(
-//     process.env.AZURE_STORAGE_CONTAINER
-// );
+const blobServiceClient = BlobServiceClient.fromConnectionString(
+    process.env.AZURE_STORAGE_CONNECTION_STRING
+);
+const containerClient = blobServiceClient.getContainerClient(
+    process.env.AZURE_STORAGE_CONTAINER
+);
 
-// async function ensureContainer() {
-//     await containerClient.createIfNotExists();
-// }
+async function ensureContainer() {
+    await containerClient.createIfNotExists();
+}
 
 function createToken(user) {
     return jwt.sign(
@@ -348,10 +348,10 @@ const io = new Server(httpServer, {
     }
 });
 
-// useAzureSocketIO(io, {
-//     hub: process.env.WEB_PUBSUB_HUB,
-//     connectionString: process.env.WEB_PUBSUB_CONNECTION_STRING
-// });
+useAzureSocketIO(io, {
+    hub: process.env.WEB_PUBSUB_HUB,
+    connectionString: process.env.WEB_PUBSUB_CONNECTION_STRING
+});
 
 io.on("connection", (socket) => {
     socket.on("join-room", (roomId) => {
