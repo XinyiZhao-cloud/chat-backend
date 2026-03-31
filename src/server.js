@@ -8,7 +8,7 @@ const multer = require("multer");
 const { v4: uuidv4 } = require("uuid");
 // const { BlobServiceClient } = require("@azure/storage-blob");
 const { Server } = require("socket.io");
-// const { useAzureSocketIO } = require("@azure/web-pubsub-socket.io");
+const { useAzureSocketIO } = require("@azure/web-pubsub-socket.io");
 
 const { getPool, sql } = require("./db");
 const authMiddleware = require("./authMiddleware");
@@ -352,10 +352,10 @@ const io = new Server(httpServer, {
     }
 });
 
-// useAzureSocketIO(io, {
-//     hub: process.env.WEB_PUBSUB_HUB,
-//     connectionString: process.env.WEB_PUBSUB_CONNECTION_STRING
-// });
+useAzureSocketIO(io, {
+    hub: process.env.WEB_PUBSUB_HUB,
+    connectionString: process.env.WEB_PUBSUB_CONNECTION_STRING
+});
 
 io.on("connection", (socket) => {
     socket.on("join-room", (roomId) => {
