@@ -278,8 +278,8 @@ app.post("/api/messages/:roomId/upload", authMiddleware, upload.single("file"), 
             return res.status(400).json({ message: "File is required." });
         }
 
-        const blobName = `${roomId}/${uuidv4()}-${req.file.originalname}`;
-        const blockBlobClient = containerClient.getBlockBlobClient(blobName);
+        // const blobName = `${roomId}/${uuidv4()}-${req.file.originalname}`;
+        // const blockBlobClient = containerClient.getBlockBlobClient(blobName);
 
         await blockBlobClient.uploadData(req.file.buffer, {
             blobHTTPHeaders: {
@@ -320,6 +320,26 @@ app.post("/api/messages/:roomId/upload", authMiddleware, upload.single("file"), 
     } catch (error) {
         console.error("Upload message error:", error);
         res.status(500).json({ message: "Server error." });
+    }
+});
+
+app.get("/api/socket", async (req, res) => {
+    try {
+        const { WebPubSubServiceClient } = require("@azure/web-pubsub");
+
+        const serviceClient = new WebPubSubServiceClient(
+            process.env.WEB_PUBSUB_CONNECTION_STRING,
+            process.env.WEB_PUBSUB_HUB
+        );
+
+        const token = await serviceClient.getClientAccessToken();
+
+        res.json({
+            url: token.url
+        });
+    } catch (err) {
+        console.error("socket token error:", err);
+        res.status(500).json({ message: "socket error" });
     }
 });
 
